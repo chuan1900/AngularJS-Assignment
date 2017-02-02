@@ -12,7 +12,9 @@ function FoundItemsDirective () {
     scope: {
       foundItems: '<',
       onRemove: '&'
-    }
+    },
+    controller: NarrowItDownController,
+		controllerAs:'narrowList',
   };
   return ddo;
 }
@@ -25,14 +27,17 @@ NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController (MenuSearchService){
   var narrow = this;
   //不要忘记把serchTerm绑定到$scope上啊啊阿！！！！
-  narrow.term = "";
+  narrow.searchTerm = " ";
+  narrow.found = [];
 
-  narrow.getMatchedMenuItems = function (narrow.term) {
-    MenuSearchService.getMatchedMenuItems(narrow.term);
+  narrow.getMatchedMenuItems = function () {
+    console.log("searchTerm: " + narrow.searchTerm);
+    //narrow.found = MenuSearchService.getMatchedMenuItems(narrow.searchTerm);
+    MenuSearchService.getMatchedMenuItems(narrow.searchTerm);
+    narrow.found = MenuSearchService.getItems();
+    console.log("found items: " + narrow.found.length);
   };
-  narrow.found = MenuSearchService.getItems();
 
-  console.log(narrow.found);
 
   narrow.removeItem = function (itemIndex) {
     MenuSearchService.removeItem(itemIndex);
@@ -49,19 +54,28 @@ function MenuSearchService($http) {
     var response = $http({
       method: "GET",
       url: ("https://davids-restaurant.herokuapp.com/menu_items.json"),
-      // params: {
-      //   category: shortName
-      // }
     });
 
     return response.then(function (response) {
       // process result and only keep items that match
-      var foundItems = response.data;
-      for(item in foundItems){
-        if(item.description.indexOf(searchTerm) !== -1){
-          found.push(item);
-        }
-      }
+      var tempList = [];
+      var foundItems = response.data.menu_items;
+      //!!!!!记得 以下for循环中 item 为 index， 而不是object!!!!!!!
+      // for(var item in foundItems){
+      //   console.log("description: " + item.description);
+      //   if(item.description.indexOf(searchTerm) !== -1){
+      //     tempList.push(item);
+      //   }
+      // }
+      for(var i =0; i < foundItems.length; i++){
+			 	var description = foundItems[i].description;
+
+			 	if(description.indexOf(searchTerm) > 0){
+			 		found.push(foundItems[i]);
+			 	    //console.log(description);
+            //console.log(foundItems[i]);
+			 	}
+			 }
       // return processed items
       return found;
     });

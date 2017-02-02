@@ -14,12 +14,12 @@
       <input type="text" ng-model="narrowList.searchTerm" placeholder="search term" class="form-control">
     </div>
     <div class="form-group narrow-button">
-      <button class="btn btn-primary" ng-click="narrowList.getMatchedMenuItems(narrowList.searchTerm);">Narrow It Down For Me!</button>
+      <button class="btn btn-primary" ng-click="narrowList.getMatchedMenuItems();">Narrow It Down For Me!</button>
     </div>
 
     <!-- found-items should be implemented as a component -->
     <found-items
-    found-items="narrowList.found"
+    found="narrowList.found"
     on-remove="narrowList.removeItem(index)"></found-items>
 
   </div>
