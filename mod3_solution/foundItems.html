@@ -1,0 +1,8 @@
+<h3>Test....</h3>
+<ul>
+  <li ng-repeat="item in narrowList.found">
+    {{item.name}} , {{item.short_name }} , {{item.description}}
+    <button type="button" class="btn btn-primary" ng-click="narrowList.onRemove({index: $index});">Don't want this one!</button>
+  </li>
+</ul>
+<div class="text-danger" ng-if="narrowList.found.length === 0">Nothing found!</div>
