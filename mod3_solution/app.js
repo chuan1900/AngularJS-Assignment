@@ -12,9 +12,7 @@ function FoundItemsDirective () {
     scope: {
       list: '<',
       onRemove: '&'
-    },
-    controller: NarrowItDownController,
-		controllerAs:'narrowList'
+    }
   };
   return ddo;
 }
