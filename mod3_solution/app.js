@@ -10,11 +10,11 @@ function FoundItemsDirective () {
   var ddo = {
     templateUrl: 'foundItems.html',
     scope: {
-      foundItems: '<',
+      list: '<',
       onRemove: '&'
     },
     controller: NarrowItDownController,
-		controllerAs:'narrowList',
+		controllerAs:'narrowList'
   };
   return ddo;
 }
@@ -27,21 +27,35 @@ NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController (MenuSearchService){
   var narrow = this;
   //不要忘记把serchTerm绑定到$scope上啊啊阿！！！！
-  narrow.searchTerm = " ";
+  narrow.searchTerm = "";
   narrow.found = [];
 
-  narrow.getMatchedMenuItems = function () {
-    console.log("searchTerm: " + narrow.searchTerm);
-    //narrow.found = MenuSearchService.getMatchedMenuItems(narrow.searchTerm);
-    MenuSearchService.getMatchedMenuItems(narrow.searchTerm);
-    narrow.found = MenuSearchService.getItems();
-    console.log("found items: " + narrow.found.length);
-  };
+  narrow.searchItems = function () {
+    var promise = MenuSearchService.getMatchedMenuItems(narrow.searchTerm);
 
+    //In order for data to appear in your template,
+    //you're going to need to assign the value you get from your then(param)
+    //and assign it to your controller.
+    promise.then(function (response) {
+      narrow.found = response;
+      console.log("found items: " + narrow.found.length);
+    })
+    .catch(function (error) {
+      console.log("error");
+    })
+  };
 
   narrow.removeItem = function (itemIndex) {
-    MenuSearchService.removeItem(itemIndex);
+    narrow.found.splice(itemIndex, 1);
   };
+
+  narrow.emptyList = function () {
+		if(narrow.found.length === 0){
+			return true;
+		}else{
+			return false;
+		}
+	};
 }
 
 
@@ -56,7 +70,7 @@ function MenuSearchService($http) {
       url: ("https://davids-restaurant.herokuapp.com/menu_items.json"),
     });
 
-    return response.then(function (response) {
+    return response.then(function success(response) {
       // process result and only keep items that match
       var tempList = [];
       var foundItems = response.data.menu_items;
@@ -71,18 +85,16 @@ function MenuSearchService($http) {
 			 	var description = foundItems[i].description;
 
 			 	if(description.indexOf(searchTerm) > 0){
-			 		found.push(foundItems[i]);
+			 		tempList.push(foundItems[i]);
 			 	    //console.log(description);
             //console.log(foundItems[i]);
 			 	}
 			 }
       // return processed items
-      return found;
+      return tempList;
+    }, function error(response){
+      console.log("ERROR");
     });
-  };
-
-  service.getItems = function () {
-    return found;
   };
 
   service.removeItem = function (itemIndex) {

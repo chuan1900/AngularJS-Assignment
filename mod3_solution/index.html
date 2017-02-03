@@ -14,12 +14,21 @@
       <input type="text" ng-model="narrowList.searchTerm" placeholder="search term" class="form-control">
     </div>
     <div class="form-group narrow-button">
-      <button class="btn btn-primary" ng-click="narrowList.getMatchedMenuItems();">Narrow It Down For Me!</button>
+      <button class="btn btn-primary" ng-click="narrowList.searchItems();">Narrow It Down For Me!</button>
     </div>
 
+    <!-- <br><br><br>
+    <ul>
+      <li ng-repeat="item in narrowList.found">
+        {{item.name}} , {{item.short_name }} , {{item.description}}
+        <button type="button" class="btn btn-primary btn-sm" ng-click="narrowList.removeItem($index);">Don't want this one!</button>
+      </li>
+    </ul>
+    <br>
+    <div class="text-danger" ng-if="narrowList.found.length === 0">Nothing selected!</div> -->
     <!-- found-items should be implemented as a component -->
     <found-items
-    found="narrowList.found"
+    list="narrowList"
     on-remove="narrowList.removeItem(index)"></found-items>
 
   </div>
