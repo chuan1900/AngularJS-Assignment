@@ -1,9 +1,7 @@
-<br><br><br>
 <ul>
-  <li ng-repeat="item in list.found">
+  <li ng-repeat="item in found.items">
     {{item.name}} , {{item.short_name }} , {{item.description}}
-    <button type="button" class="btn btn-primary btn-sm" ng-click="list.onRemove({index: $index});">Don't want this one!</button>
+    <button type="button" class="btn btn-primary btn-sm" ng-click="found.onRemove({index: $index});">Don't want this one!</button>
   </li>
 </ul>
-<br>
-<div class="text-danger" ng-if="list.emptyList()">Nothing selected!</div>
+<div class="text-danger" ng-if="found.items.length === 0">Nothing selected!</div>
