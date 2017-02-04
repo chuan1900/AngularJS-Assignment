@@ -2,7 +2,7 @@
 <ul>
   <li ng-repeat="item in list.found">
     {{item.name}} , {{item.short_name }} , {{item.description}}
-    <button type="button" class="btn btn-primary btn-sm" ng-click="list.onRemove({index: $index});">Don't want this one!</button>
+    <button type="button" class="btn btn-primary btn-sm" ng-click="list.removeItem({index: $index});">Don't want this one!</button>
   </li>
 </ul>
 <br>
