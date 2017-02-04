@@ -3,8 +3,8 @@
 
 angular.module('NarrowItDownApp', [])
 .controller('NarrowItDownController', NarrowItDownController)
-.service('MenuSearchService', MenuSearchService)
-.directive('foundItems', FoundItemsDirective);
+.service('MenuSearchService', MenuSearchService);
+// .directive('foundItems', FoundItemsDirective);
 
 function FoundItemsDirective () {
   var ddo = {
@@ -12,7 +12,9 @@ function FoundItemsDirective () {
     scope: {
       list: '<',
       onRemove: '&'
-    }
+    },
+    controller: NarrowItDownController,
+    controllerAs:'narrowList'
   };
   return ddo;
 }
@@ -36,7 +38,7 @@ function NarrowItDownController (MenuSearchService){
     //and assign it to your controller.
     promise.then(function (response) {
       narrow.found = response;
-      console.log("found items: " + narrow.found.length);
+      console.log("found items : " + narrow.found.length);
     })
     .catch(function (error) {
       console.log("error");
@@ -44,7 +46,8 @@ function NarrowItDownController (MenuSearchService){
   };
 
   narrow.removeItem = function (itemIndex) {
-    narrow.found.splice(itemIndex, 1);
+    //narrow.found.splice(itemIndex, 1);
+    MenuSearchService.removeItem(itemIndex);
   };
 
   narrow.emptyList = function () {
@@ -60,7 +63,7 @@ function NarrowItDownController (MenuSearchService){
 MenuSearchService.$inject = ['$http'];
 function MenuSearchService($http) {
   var service = this;
-  var found = [];
+  var tempList = [];
 
   service.getMatchedMenuItems = function (searchTerm) {
     var response = $http({
@@ -68,9 +71,10 @@ function MenuSearchService($http) {
       url: ("https://davids-restaurant.herokuapp.com/menu_items.json"),
     });
 
+
     return response.then(function success(response) {
       // process result and only keep items that match
-      var tempList = [];
+      //var tempList = [];
       var foundItems = response.data.menu_items;
       //!!!!!记得 以下for循环中 item 为 index， 而不是object!!!!!!!
       // for(var item in foundItems){
@@ -84,11 +88,12 @@ function MenuSearchService($http) {
 
 			 	if(description.indexOf(searchTerm) > 0){
 			 		tempList.push(foundItems[i]);
-			 	    //console.log(description);
+			 	    console.log(description);
             //console.log(foundItems[i]);
 			 	}
 			 }
       // return processed items
+      //found = tempList;
       return tempList;
     }, function error(response){
       console.log("ERROR");
@@ -96,7 +101,7 @@ function MenuSearchService($http) {
   };
 
   service.removeItem = function (itemIndex) {
-    items.splice(itemIndex, 1);
+    tempList.splice(itemIndex, 1);
   };
 }
 })();

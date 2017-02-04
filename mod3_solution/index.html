@@ -17,7 +17,7 @@
       <button class="btn btn-primary" ng-click="narrowList.searchItems();">Narrow It Down For Me!</button>
     </div>
 
-    <!-- <br><br><br>
+    <br><br><br>
     <ul>
       <li ng-repeat="item in narrowList.found">
         {{item.name}} , {{item.short_name }} , {{item.description}}
@@ -25,11 +25,11 @@
       </li>
     </ul>
     <br>
-    <div class="text-danger" ng-if="narrowList.found.length === 0">Nothing selected!</div> -->
+    <div class="text-danger" ng-if="narrowList.found.length === 0">Nothing selected!</div>
     <!-- found-items should be implemented as a component -->
-    <found-items
+    <!-- <found-items
     list="narrowList"
-    on-remove="narrowList.removeItem(index)"></found-items>
+    on-remove="narrowList.removeItem(index)"></found-items> -->
 
   </div>
   <script src="angular.min.js"></script>
